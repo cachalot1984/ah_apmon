@@ -131,10 +131,10 @@ TODO
 
 ## Code Architecture
 To minimize latency, the code is arranged into several individual threads:
-main thread: started by user through command line, global initialization(cmdline options, key/mouse callbacks), starts the other threads, display GUI
-new AP detection thread: repeatedly detect new online APs in the subnet
-AP detection/updating thread: monitor when an exiting AP is online/offline, repeatedly update the AP's radio/ACSP/nbr statistics
-AP coordinates calculation thread: calculate each AP's location according to the '3-point-locating' algorithm
+* main thread: started by user through command line, global initialization(cmdline options, key/mouse callbacks), starts the other threads, display GUI
+* new AP detection thread: repeatedly detect new online APs in the subnet
+* AP detection/updating thread: monitor when an exiting AP is online/offline, repeatedly update the AP's radio/ACSP/nbr statistics
+* AP coordinates calculation thread: calculate each AP's location according to the '3-point-locating' algorithm
 
 ## Usage
 The acspmon tool could be downloaded in the first item of the 'Reference' section.
