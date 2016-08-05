@@ -16,6 +16,7 @@ Class AP inherits from its parent class 'SSHNode', class AP is composed by a lis
 To collect a ACSPNbr object's info, the following CLIs are used:
 
 > show acsp neighbo
+
 > show acsp _nbr' are used.
 
 To collect a radio's ACSP info, the following CLIs are used:
@@ -25,11 +26,13 @@ To collect a radio's ACSP info, the following CLIs are used:
 To collect other info of a Radio object, the following CLIs are used:
 
 > show interface | in <wifix>
+
 > show interface <wifix>
 
 To collect other info of an AP object, the following CLIs are used:
 
 > show interface | in mgt0
+
 > show version
 
 Each AP object repeatedly updates its radios' ACSP info in background. Another thread that calculates GUI coordinates will use these info. For easy back reference, a Radio object has an 'ap' attribute to find its belonging AP, and an ACSPNbr object has a 'radio' attribute to find its corresponding neighbor radio.
