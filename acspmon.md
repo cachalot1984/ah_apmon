@@ -14,19 +14,23 @@ Python is object-oriented language, to abstract AP's ACSP info and GUI info, it'
 
 Class AP inherits from its parent class 'SSHNode', class AP is composed by a list of Radio objects 'radios', the Radio class inherits from class 'ACSP' and 'GUICircle', 'ACSP' again is composed by a list of ACSPNbr objects 'nbrs'.
 To collect a ACSPNbr object's info, the following CLIs are used:
-* show acsp neighbo
-* show acsp _nbr' are used.
+
+> show acsp neighbo
+> show acsp _nbr' are used.
 
 To collect a radio's ACSP info, the following CLIs are used:
-* show acsp
+
+> show acsp
 
 To collect other info of a Radio object, the following CLIs are used:
-* show interface | in <wifix>
-* show interface <wifix>
+
+> show interface | in <wifix>
+> show interface <wifix>
 
 To collect other info of an AP object, the following CLIs are used:
-* show interface | in mgt0
-* show version
+
+> show interface | in mgt0
+> show version
 
 Each AP object repeatedly updates its radios' ACSP info in background. Another thread that calculates GUI coordinates will use these info. For easy back reference, a Radio object has an 'ap' attribute to find its belonging AP, and an ACSPNbr object has a 'radio' attribute to find its corresponding neighbor radio.
 
@@ -47,6 +51,7 @@ Basically, APs could be relatively located based to the "3-point locating' metho
 An AP could be located by other 3 neighbor APs. If consider the radio coverage as circle with center c and radius r, 2 of the 3 APs have 2 cross points and could locate the AP to 2 locations. The third neighbor AP finally choose the final appropriate location.
 
 Suppose we need to know AP D's location, it has 3 neighbors AP A, B, and C that are already located(have location coordinates), whose wifi0 txpowr is PTa, PTb, and PTc correspondingly. After querying AP D's ACSP neighbor tables, we also know the wifi0 RSSI of A, B and C that detected by D are PRa, PRb, and PRc correspondingly. Now we could calculate:
+
 1. The path loss from AP A to D is: PTa - TRa, according to FSPL formula, we could know the distance from A to D is r1 (D could be any point along the circle that with A as center point and r1 as radius)
 2. The path loss from AP B to D is: PTb - TRa, according to FSPL formula, we could know the distance from B to D is r2 (D could be any point along the circle that with B as center point and r2 as radius)
 3. To satisfy both 1, and 2 above, D could only be one of the two cross points of circle A and B: L1 and L2
@@ -54,12 +59,14 @@ Suppose we need to know AP D's location, it has 3 neighbors AP A, B, and C that 
 5. To finally determine which of L1 and L2 is D's location, we compare the distance of L1 to C(d1) and L2 to C(d2), the one that is close to r3 decides the final location of D. e.g. abs(d1-r3) < abs(d2-r3), then D is at point L1
 
 To calculate each AP's coordinates as accurate as possible, we also need to use the following rules:
+
 1. It's better to calculate the center of the AP cluster(high nbr score) first, and other APs are gradually calculated in the'from-center-to-outside' direction. Thus the final figure involving all APs is displayed at the center of the GUI canvas
 2. To calculate an AP, its other 3 AP neighbors used to locate it must be as close as possible to this AP, so that the FSPL algorithm is more reliable(longer distance transmission is supposed to less accurate since there are more obstacles which absorbs the RF)
 3. In case there are so many APs in the cluster and some AP's ACSP neighbor table is full, the 3 reference AP neighbors used to locate it might not be available, this AP could be bypassed temporarily in the current iteration, and could be calculated later when other APs complete calculation, which are in that AP's neighbor table
 4. For APs with 2 radios, wifi0 has higher priority to be used for calculation, if wifi0 is not in the neighbor table, wifi1 could be tried.
 
 Note that the first 3 APs are handled specially:
+
 1. The 1st AP is put at the center of the GUI canvas
 2. The 2nd AP is always put to the direct right of the 1st AP, with a distance that is calculated by the FSPL formula
 3. Use the first 2 APs are reference neighbors A and B, the 3rd AP could only be at location L1 or L2, we force it to be L1. 
